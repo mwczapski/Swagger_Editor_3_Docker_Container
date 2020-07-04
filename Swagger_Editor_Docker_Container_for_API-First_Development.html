@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Swagger_Editor_Docker_Container_for_API-First_Development.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="swagger-editor-30-docker-container">Swagger Editor 3.0 Docker Container</h1>
+<!-- <font size="6">Swagger Editor Docker Container</font> -->
+<!-- TOC -->
+<ul>
+<li><a href="#swagger-editor-30-docker-container">Swagger Editor 3.0 Docker Container</a></li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#assumptions">Assumptions</a></li>
+<li><a href="#instant-gratification-docker-container"><em>Instant Gratification</em> Docker Container</a>
+<ul>
+<li><a href="#host-artefacts">Host Artefacts</a>
+<ul>
+<li><a href="#create-host-directories">Create Host directories</a></li>
+<li><a href="#create-the-example-openapiyaml-api-specification-openapi-301">Create the example openapi.yaml API Specification (OpenAPI 3.0.1)</a></li>
+</ul>
+</li>
+<li><a href="#create-docker-image">Create Docker Image</a>
+<ul>
+<li><a href="#create-dockerfile-in-the-host-directory">Create Dockerfile in the Host directory</a></li>
+<li><a href="#create-baseline-docker-image">Create baseline Docker Image</a></li>
+</ul>
+</li>
+<li><a href="#start-the-docker-container-instance">Start the Docker Container Instance</a>
+<ul>
+<li><a href="#create-a-container-based-on-the-new-image">Create a container based on the new Image</a></li>
+<li><a href="#connect-to-the-running-container">Connect to the running container</a></li>
+<li><a href="#test-swagger-editor">Test Swagger Editor</a></li>
+<li><a href="#important-notes">Important Notes</a></li>
+</ul>
+</li>
+<li><a href="#must-i-edit-openapiyaml-file-in-the-container">Must I edit openapi.yaml file in the container?</a></li>
+<li><a href="#how-to-edit-the-yaml-file-in-the-container">How to edit the yaml file in the Container</a>
+<ul>
+<li><a href="#use-docker-cp-command">Use docker cp command</a></li>
+<li><a href="#use-vscode-remote">Use VSCode Remote</a></li>
+<li><a href="#use-bound-volume">Use bound volume</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#other-notes">Other Notes</a>
+<ul>
+<li><a href="#initial-api-specification-example-yaml">Initial API Specification Example YAML</a></li>
+<li><a href="#json-versions-of-specification">JSON Versions of Specification</a></li>
+<li><a href="#where-to-change-where-swagger-editor-looks-for-the-yaml-specification-and-under-what-name">Where to change where Swagger Editor looks for the YAML specification and under what name?</a></li>
+<li><a href="#what-port-does-swagger-editor-listen-on">What port does Swagger Editor listen on?</a></li>
+</ul>
+</li>
+<li><a href="#next-steps">Next Steps</a></li>
+<li><a href="#licensing">Licensing</a></li>
+</ul>
+<!-- /TOC -->
+<!--
+# TODO
+
+-   write the 'how to use the image' writeup to go with the image
+-   Upload the image to the docker hub
+-   write a 'how to use the container' to go with the container
+-   git and push to github
+-   write a blog entry and post
+-   write a tweet and post
+ -->
+<h1 id="introduction">Introduction</h1>
+<p>The intent of this document is to provide a set of steps that a reader can use to create a self-contained Docker container for API-First development using latest Swagger Editor (3.x) and OpenAPI (2 or 3).<br>
+A Dockerfile is provided to short-circuit the process.</p>
+<p>The container will have the means to:</p>
+<ul>
+<li>Run the Swagger Editor Server</li>
+<li>Convert YAML specification documents to JSON and the vice versa</li>
+</ul>
+<p>The container is based on the latest Docker node image with extras.</p>
+<p>The container uses:</p>
+<ul>
+<li>Swagger Editor Distributable (<code>swagger-editor-dist</code>)</li>
+<li><code>swagger-codegen-cli/3.0.20</code> to support YAML to JSON conversion and generation of client and server stubs based on the OpenAPI Specification / Swagger file for supported languages. <code>swagger-codegen-cli</code> requires Java 8, which is installed during container setup.</li>
+<li><code>nodemon</code> server</li>
+<li><code>http-server</code> server</li>
+</ul>
+<p><a href="#Swagger-Editor-Docker-Container-for-API-First-Development">[Top]</a></p>
+<h1 id="assumptions">Assumptions</h1>
+<p>It is assumed in the text that Windows 10 with Debian WSL is the Host operating environment.</p>
+<p>Make such changes, to the small number of commands that this affects, as you need to make it work in a regular Linux environment.</p>
+<p><a href="#Swagger-Editor-Docker-Container-for-API-First-Development">[Top]</a></p>
+<h1 id="instant-gratification-docker-container"><em>Instant Gratification</em> Docker Container</h1>
+<p>In this section we will create a docker container with all that can be pre-installed and pre-configured to run the Swagger Editor server and convert between YAML and JSON openapi specifications.</p>
+<p>It is assumed that the Host build environment is Windows 10 with Debian WSL (Windows Subsystem for Linux), Docker installed in Windows 10 and all Host work done using WSL Debian bash shell.</p>
+<blockquote>
+<p>Once the image is built it will not matter in what environment it was built and docker commands to create and manage the container are much the same regardless of the docker host environment.</p>
+</blockquote>
+<p>If this does not match your environment then you will need to make such adjustments as might be required. At most Host paths are likely to require changes from something like <code>/mnt/d/...</code> to something like <code>D:/...</code> or <code>/usr/home/myself/...</code> or <code>/opt/dockerwork/...</code> or some such.</p>
+<p><a href="#Swagger-Editor-Docker-Container-for-API-First-Development">[Top]</a></p>
+<h2 id="host-artefacts">Host Artefacts</h2>
+<h3 id="create-host-directories">Create Host directories</h3>
+<p>Adjust Host paths above directory named <code>api</code> as you see fit.</p>
+<pre class="hljs"><code><div>HOST_DIR=/mnt/d/github_materials
+
+mkdir -pv ${HOST_DIR}/swagger_editor/api
+cd ${HOST_DIR}/swagger_editor
+
+</div></code></pre>
+<p><a href="#Swagger-Editor-Docker-Container-for-API-First-Development">[Top]</a></p>
+<h3 id="create-the-example-openapiyaml-api-specification-openapi-301">Create the example openapi.yaml API Specification (OpenAPI 3.0.1)</h3>
+<p>We need example openapi specifications in yaml and json in the Docker image.</p>
+<p>The easiest way to example specs to the Image is to create them on the host and copy them to the image while building it.</p>
+<pre class="hljs"><code><div>HOST_DIR=/mnt/d/github_materials
+
+cat &lt;&lt;-'EOF' &gt; ${HOST_DIR}/swagger_editor/api/openapi.yaml
+openapi: "3.0.1"
+info:
+  title: Weather API
+  description: |
+    This API is a __test__ API for validation of local swagger editor
+    and swagger ui deployment and configuration
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:3003/'
+tags:
+  - name: Weather
+    description: Weather, and so on
+paths:
+  /weather:
+    get:
+      tags:
+        - Weather
+      description: |
+        It is __Good__ to be a _King_
+        And a *Queen*
+        And a _Prince_
+        And a __Princess__
+        And all the Grandchildren
+        And their Children
+      operationId: getWeather
+      responses:
+        '200':
+          description: 'All is _well_, but not quite'
+          content: {}
+        '500':
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_500'
+components:
+  schemas:
+    response_500:
+      type: object
+      properties:
+        message:
+          type: string
+
+EOF
+
+</div></code></pre>
+<p><a href="#Swagger-Editor-Docker-Container-for-API-First-Development">[Top]</a></p>
+<h2 id="create-docker-image">Create Docker Image</h2>
+<p>The Dockerfile and following instructions will create a baseline Docker Image. The Image will be able to be used for spinning up Container instances as needed with minimum extra work required to make them useable for API development work on different APIs.</p>
+<p><a href="#Swagger-Editor-Docker-Container-for-API-First-Development">[Top]</a></p>
+<h3 id="create-dockerfile-in-the-host-directory">Create Dockerfile in the Host directory</h3>
+<p>Change timezone and exposed ports as required.</p>
+<pre class="hljs"><code><div>HOST_DIR=/mnt/d/github_materials
+
+cat &lt;&lt;-'EOF' &gt; ${HOST_DIR}/swagger_editor/Dockerfile
+FROM node:latest
+
+ENV TZ_PATH="Australia/Sydney"
+ENV TZ_NAME="Australia/Sydney"
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update &amp;&amp; \
+    apt-get upgrade -y &amp;&amp; \
+    apt-get install -y \
+    dos2unix \
+    openjdk-8-jdk &amp;&amp; \
+  \
+  npm i -g \
+    http-server \
+    nodemon &amp;&amp; \
+    \
+<span class="hljs-meta">  #</span><span class="bash"> <span class="hljs-built_in">set</span> timezone</span>
+<span class="hljs-meta">  #</span>
+  cp -v /usr/share/zoneinfo/${TZ_PATH} /etc/localtime &amp;&amp; \
+  echo "${TZ_NAME}" &gt; /etc/timezone &amp;&amp; \
+  \
+<span class="hljs-meta">  #</span><span class="bash"> create the api directory (to be masked by bound volume <span class="hljs-keyword">if</span> required)</span>
+<span class="hljs-meta">  #</span>
+  mkdir -pv /api
+
+COPY api/openapi.yaml /api
+
+RUN \
+\
+<span class="hljs-meta">  #</span><span class="bash"> copy openapi.yaml to swagger-editor</span>
+<span class="hljs-meta">  #</span>
+  mkdir -pv /swagger_tools/swagger-editor &amp;&amp; \
+  cp -v /api/openapi.yaml /swagger_tools/swagger-editor &amp;&amp; \
+\
+<span class="hljs-meta">  #</span><span class="bash"> <span class="hljs-string">"install"</span> swagger-codegen</span>
+<span class="hljs-meta">  #</span>
+  mkdir -pv /swagger_tools/swagger-codegen &amp;&amp; \
+  wget https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/3.0.20/swagger-codegen-cli-3.0.20.jar -O /swagger_tools/swagger-codegen/swagger-codegen-cli.jar &amp;&amp; \
+\
+<span class="hljs-meta">  #</span><span class="bash"> convert yaml to jason and back again</span>
+<span class="hljs-meta">  #</span>
+  cd /swagger_tools/swagger-editor/ &amp;&amp; \
+  java -jar /swagger_tools/swagger-codegen/swagger-codegen-cli.jar generate -i /swagger_tools/swagger-editor/openapi.yaml -l openapi -o /swagger_tools/swagger-editor &amp;&amp; \
+  java -jar /swagger_tools/swagger-codegen/swagger-codegen-cli.jar generate -i /swagger_tools/swagger-editor/openapi.json -l openapi-yaml -o /swagger_tools/swagger-editor/converted &amp;&amp; \
+\
+<span class="hljs-meta">  #</span><span class="bash"> Install swagger-editor</span>
+<span class="hljs-meta">  #</span>
+  cd /swagger_tools/  &amp;&amp; \
+  npm init -y &amp;&amp; \
+  npm i swagger-editor-dist  &amp;&amp; \
+  cp -rv node_modules/swagger-editor-dist/* /swagger_tools/swagger-editor &amp;&amp; \
+\
+<span class="hljs-meta">  #</span><span class="bash"> update index.html to use the <span class="hljs-built_in">local</span> openapi.json</span>
+<span class="hljs-meta">  #</span>
+  cd /swagger_tools/swagger-editor &amp;&amp; \
+  sed -i "s|const editor = SwaggerEditorBundle({|const editor = SwaggerEditorBundle({ url: 'http://localhost:3001/openapi.yaml',|" index.html &amp;&amp; \
+  echo "Done" &amp;&amp; \
+\
+<span class="hljs-meta">  #</span><span class="bash"> create <span class="hljs-string">"run editor"</span> server script</span>
+<span class="hljs-meta">  #</span>
+  echo '#!/bin/bash' &gt; /swagger_tools/run_editor_server.sh &amp;&amp; \
+  echo 'cd /swagger_tools/swagger-editor' &gt;&gt; /swagger_tools/run_editor_server.sh &amp;&amp; \
+  echo 'nodemon -L -w index.html -w /api/openapi.yaml -w /api/*.pdf -x "cp -v /api/* /swagger_tools/swagger-editor/ &amp;&amp; http-server -p 3001"' &gt;&gt; ${0}.log &gt;&gt; /swagger_tools/run_editor_server.sh &amp;&amp; \
+  chmod u+x /swagger_tools/run_editor_server.sh &amp;&amp; \
+\
+  sed -i '/set -e/a test $( ps -C run_editor_serv -o stat --no-headers ) == "S" || nohup /swagger_tools/run_editor_server.sh &lt;/dev/null &amp;' /usr/local/bin/docker-entrypoint.sh
+
+EXPOSE 3001
+
+EOF
+
+</div></code></pre>
+<p><a href="#Swagger-Editor-Docker-Container-for-API-First-Development">[Top]</a></p>
+<h3 id="create-baseline-docker-image">Create baseline Docker Image</h3>
+<p>The following command will create the baseline image with specific packages pre-installed and the timezone set.</p>
+<pre class="hljs"><code><div>CONTAINER_NAME=swagger_editor
+IMAGE_VERSION=1.0.0
+
+docker build \
+    --tag ${CONTAINER_NAME}:${IMAGE_VERSION} \
+    --force-rm .
+
+</div></code></pre>
+<p>At this point we have the new image <code>swagger_editor:1.0.0</code>ready to roll.</p>
+<p>From this point, until the image is deleted, we can spin up a container, based on this image, in a matter of seconds.</p>
+<p><a href="#Swagger-Editor-Docker-Container-for-API-First-Development">[Top]</a></p>
+<h2 id="start-the-docker-container-instance">Start the Docker Container Instance</h2>
+<h3 id="create-a-container-based-on-the-new-image">Create a container based on the new Image</h3>
+<p>Now that we have the baseline image we can create and explore a container that uses it.</p>
+<pre class="hljs"><code><div>IMAGE_VERSION="1.0.0"
+IMAGE_NAME="swagger_editor"
+CONTAINER_NAME="swagger_editor"
+CONTAINER_HOSTNAME="swagger_editor"
+CONTAINER_MAPPED_PORTS=" -p 127.0.0.1:3001:3001/tcp "
+
+docker run \
+    --name ${CONTAINER_NAME} \
+    --hostname ${CONTAINER_HOSTNAME} \
+    ${CONTAINER_MAPPED_PORTS} \
+    --detach \
+    --interactive \
+    --tty\
+        ${IMAGE_NAME}:${IMAGE_VERSION}
+
+</div></code></pre>
+<p><a href="#Swagger-Editor-Docker-Container-for-API-First-Development">[Top]</a></p>
+<h3 id="connect-to-the-running-container">Connect to the running container</h3>
+<p>The following command will connect us to teh running container and offer us the interactive shell to work in:</p>
+<pre class="hljs"><code><div>docker exec -it -w='/api' swagger_editor bash -l
+</div></code></pre>
+<p><a href="#Swagger-Editor-Docker-Container-for-API-First-Development">[Top]</a></p>
+<h3 id="test-swagger-editor">Test Swagger Editor</h3>
+<p>The swagger-editor server is started when the container is created and started, and re-starts when the container is restarted.</p>
+<p>With the container running, in a host web browser open the pre-configured API specification in the swagger-editor.</p>
+<p>http://localhost:3001/#</p>
+<p>Please note that the Swagger Editor is running in the Host's Web Browser and that it can import OpenAPI specifications from the Host and export / save OpenAPI specifications ot the host, this it can be used as a local Swagger Editor on the Host.</p>
+<h3 id="important-notes">Important Notes</h3>
+<p>The Swagger Editor server's <code>index.html</code> has been rigged to serve the file <code>openapi.yaml</code> from its own directory.</p>
+<p>The command in the Dockerfile is reproduced below.</p>
+<pre class="hljs"><code><div>nodemon -L -w index.html -w /api -x "cp -v /api/* /swagger_tools/swagger-editor/ &amp;&amp; http-server -p 3001"
+
+</div></code></pre>
+<p>It instructs <code>nodemon</code> to watch for changes to files in directory <code>/api</code>.<br>
+If a change is detected, <code>nodemon</code> will copy all files from that directory to the <code>/swagger_tools/swagger-editor</code> directory and will restart the <code>http-server</code>.</p>
+<p>Please note that the Swagger Editor runs in the Web Browser in the Host environment.<br>
+Unless the container startup command is configured so that it mounts a host directory over the top of the containers <code>/api</code> directory, Swagger Editor will have no ability to write to the <code>/api</code> directory in the container, so any changes through the Swagger Editor will be local to the Host.</p>
+<p>As given in the example, as soon as the <code>openapi.yaml</code> changes in the <code>api</code> directory, the server will be restarted and the Web Browser on the Host can be refreshed to load the changed version of <code>openapi.yaml</code>.</p>
+<p><a href="#Swagger-Editor-Docker-Container-for-API-First-Development">[Top]</a></p>
+<h2 id="must-i-edit-openapiyaml-file-in-the-container">Must I edit openapi.yaml file in the container?</h2>
+<p><strong>No.</strong></p>
+<p>As mentioned at the last paragraph in section <a href="#Test-Swagger-Editor">Test Swagger Editor</a>, this container can be used as a local Swagger Editor for editing OpenAPI files in Host directories.</p>
+<h2 id="how-to-edit-the-yaml-file-in-the-container">How to edit the yaml file in the Container</h2>
+<p>There are at least 3 different ways in which the container's <code>/api/openapi.yaml</code> file can be edited such that changes persist across container re-creation.</p>
+<h3 id="use-docker-cp-command">Use docker cp command</h3>
+<p>Docker has the ability to copy files from the Host to the Container and vice versa.</p>
+<p>Here is the <code>docker cp</code> usage:</p>
+<pre class="hljs"><code><div>"docker cp" requires exactly 2 arguments.
+See 'docker cp --help'.
+
+Usage:  docker cp [OPTIONS] CONTAINER:SRC_PATH DEST_PATH|-
+        docker cp [OPTIONS] SRC_PATH|- CONTAINER:DEST_PATH
+
+Copy files/folders between a container and the local filesystem
+</div></code></pre>
+<p>Assuming the container as discussed so far, with <code>openapi.yaml</code> in the container directory <code>/api</code> being the <strong><em>source-of-truth</em></strong>, here are the steps:</p>
+<ol>
+<li>Copy <code>openapi.yaml</code> from the container to the Host
+<ol>
+<li>Open a terminal window on the Host in the Host directory to which you want to copy the container's openapi.yaml</li>
+<li>execute <code>docker cp swagger_editor:/api/openapi.yaml ./</code></li>
+</ol>
+</li>
+<li>Copy <code>openapi.yaml</code> from the Host to the Container
+<ol>
+<li>Open a terminal window on Host in the Host directory to where oyu have the openapi.yaml file which you want to copy the container</li>
+<li>execute <code>docker cp ./openapi.yaml swagger_editor:/api</code></li>
+</ol>
+</li>
+</ol>
+<p>Using this method one can edit the original <code>openapi.yaml</code> file in the local Swagger Editor, save it to the Host, and copy it to the container for the next Swagger Editor session.</p>
+<h3 id="use-vscode-remote">Use VSCode Remote</h3>
+<p>If you use VSCode for development, and VSCode has the Remote Containers extension installed, you can connect to the container and use VSCode to edit files directly in the container.</p>
+<p>Here are the steps:</p>
+<ol>
+<li>Start the container as discussed so far.</li>
+<li>Connect to the container as discussed in <a href="#connect-to-the-running-container">Connect to the running container</a></li>
+<li>Start VSCode on the <strong><em>Host</em></strong></li>
+<li>Click on the green '<strong>&gt;<sup>&lt;</sup></strong>' rectangle in the bottom-left corner (Shows &quot;<code>Open Remote Window</code>&quot; legend if one hovers the mouse over it)</li>
+<li>From the dropdown, top-centre of the VSCode window, choose &quot;<code>Remote-Containers: Attach to Running Container...</code>&quot;</li>
+<li>From the dropdown, select &quot;<code>/swagger_editor: swagger_editor:1.0.0 ...</code>&quot;</li>
+<li>When the new VSCode window opens, click on the &quot;<code>Open Folder</code>&quot; button and enter <code>/api</code></li>
+<li>Edit the <code>openapi.yaml</code> file to your heart's content</li>
+<li>Save</li>
+<li>Refresh the Host Web Browser window to see changes</li>
+</ol>
+<p>The remote VSCode might need OpenAPI / Swagger extensions for pretty-printing, snippets and so on. Pick any you like.</p>
+<p>You can copy the <code>openapi.yaml</code> file between the Host and the Guest, in either direction, using docker cp command. See <a href="#Use-docker-cp-command">Use docker cp command</a>.</p>
+<h3 id="use-bound-volume">Use bound volume</h3>
+<p>It is possible to share a Host directory with the container in such a way that changes made in one environment are visible in the other.</p>
+<p>To effect this, one needs to start the docker container with a modified command line so that docker gets told what Host directory to share and where to &quot;mount&quot; it in the container's file system.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>On the Host, stop and remove the container if it is running: <code>docker container stop swagger_editor; docker container rm swagger_editor</code></li>
+<li>On the host, start the container with the following command, assuming <code>/mnt/d/github_materials/swagger_editor/api</code> is the host directory to share:</li>
+</ol>
+<pre class="hljs"><code><div>SOURCE_HOST_DIR=d:/github_materials/swagger_editor
+
+IMAGE_VERSION="1.0.0"
+IMAGE_NAME="swagger_editor"
+CONTAINER_NAME="swagger_editor"
+CONTAINER_HOSTNAME="swagger_editor"
+CONTAINER_VOLUME_MAPPING=" -v ${SOURCE_HOST_DIR}/api:/api"
+CONTAINER_MAPPED_PORTS=" -p 127.0.0.1:3001:3001/tcp "
+
+docker run \
+    --name ${CONTAINER_NAME} \
+    --hostname ${CONTAINER_HOSTNAME} \
+    ${CONTAINER_VOLUME_MAPPING} \
+    ${CONTAINER_MAPPED_PORTS} \
+    --detach \
+    --interactive \
+    --tty\
+        ${IMAGE_NAME}:${IMAGE_VERSION}
+
+</div></code></pre>
+<ol start="4">
+<li>Connect to the container as discussed in <a href="#connect-to-the-running-container">Connect to the running container</a></li>
+<li>Use the Swagger Editor in the Host Web Browser to access and change the <code>openapi.yaml</code> file</li>
+<li>When done, pull down the <code>File-&gt;Save as YAML</code> and save the file as <code>openapi.yaml</code> in the Host directory <code>d\:github_materials\swagger_editor\api</code></li>
+<li>In Guest, note that the <code>http-server</code> was re-started because <code>nodemon</code> recognised that the file in the directory it is watching changed.</li>
+<li>In the container view the file <code>/api/openapi.yaml</code> and see the changes</li>
+</ol>
+<p>Because the host and the container share the (bound) volume where the API specification exists, it is possible to edit the file on Host and in the container and see the changes in either environment.</p>
+<p><a href="#Swagger-Editor-Docker-Container-for-API-First-Development">[Top]</a></p>
+<h1 id="other-notes">Other Notes</h1>
+<h2 id="initial-api-specification-example-yaml">Initial API Specification Example YAML</h2>
+<p>Our original OpenAPI Specification was copied to the container file <code>/api/openapi.yaml</code> during Docker Image build.</p>
+<p><a href="#Swagger-Editor-Docker-Container-for-API-First-Development">[Top]</a></p>
+<h2 id="json-versions-of-specification">JSON Versions of Specification</h2>
+<p>Our subsequent manipulations, during Docker Image build, resulted in the creation of the following equivalents:</p>
+<pre class="hljs"><code><div>/swagger_tools/swagger-editor/openapi.json
+/swagger_tools/swagger-editor/converted/openapi.yaml
+</div></code></pre>
+<p><a href="#Swagger-Editor-Docker-Container-for-API-First-Development">[Top]</a></p>
+<h2 id="where-to-change-where-swagger-editor-looks-for-the-yaml-specification-and-under-what-name">Where to change where Swagger Editor looks for the YAML specification and under what name?</h2>
+<p><code>/swagger_tools/swagger-editor/index.html</code>.
+Please note that this change will persist once the docker container in which it is made is removed and re-created, unless this change is made in the Dockerfile and the image is re-built. Subsequently created containers that use the modified image will &quot;inherit&quot; the change.</p>
+<p><a href="#Swagger-Editor-Docker-Container-for-API-First-Development">[Top]</a></p>
+<h2 id="what-port-does-swagger-editor-listen-on">What port does Swagger Editor listen on?</h2>
+<p>Swagger Editor server inside the container listens on port 3001.
+To change the port on which the Host listens, change the port mapping the container start command uses.</p>
+<p>For example:</p>
+<pre class="hljs"><code><div>CONTAINER_MAPPED_PORTS=" -p 127.0.0.1:3210:3001/tcp "
+
+</div></code></pre>
+<p>will change the port the Hosts maps to the container's 3001 from 3001 to 3210. The Host's web browser will need to use the url <code>http://localost:3210/#</code> to connect to the Swagger Editor served from container.</p>
+<p>If you change the listening port make sure to adjust your <code>docker run ...</code> and <code>docker exec ...</code> commands otherwise you will not be able to connect to the listener in the container from outside.</p>
+<p><a href="#Swagger-Editor-Docker-Container-for-API-First-Development">[Top]</a></p>
+<h1 id="next-steps">Next Steps</h1>
+<p>Now that one can edit the API using a Swagger Editor hosted in the local environment in a docker container it might be good to be able to generate API stubs to test the API.</p>
+<p>This is coming in the next installment.</p>
+<p><a href="#Swagger-Editor-Docker-Container-for-API-First-Development">[Top]</a></p>
+<h1 id="licensing">Licensing</h1>
+<p>The MIT License (MIT)</p>
+<p>Copyright © 2020 Michael Czapski</p>
+<p>Rights to Docker (and related), Git (and related), Debian, its packages and libraries, and 3rd party packages and libraries, belong to their respective owners.</p>
+<p><a href="#Swagger-Editor-Docker-Container-for-API-First-Development">[Top]</a></p>
+<p>2020/07 MCz</p>
+
+</body>
+</html>
