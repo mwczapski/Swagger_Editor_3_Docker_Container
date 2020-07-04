@@ -1,0 +1,14 @@
+# disallow what's below
+*.lnk
+*.url
+Downloads
+*.zip
+*.tar.gz
+*.7z
+~*
+_*
+.vscode
+node_modules
+
+# allow anything that starts with __env
+!__env*

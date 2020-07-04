@@ -1,0 +1,43 @@
+openapi: "3.0.1"
+info:
+  title: Weather API
+  description: |
+    This API is a __test__ API for validation of local swagger editor
+    and swagger ui deployment and configuration
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:3003/'
+tags:
+  - name: Weather
+    description: Weather, and so on
+paths:
+  /weather:
+    get:
+      tags:
+        - Weather
+      description: |
+        It is __Good__ to be a _King_
+        And a *Queen*
+        And a _Prince_
+        And a __Princess__
+        And all the Grandchildren
+        And their Children
+      operationId: getWeather
+      responses:
+        '200':
+          description: 'All is _well_, but not quite'
+          content: {}
+        '500':
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_500'
+components:
+  schemas:
+    response_500:
+      type: object
+      properties:
+        message:
+          type: string
+
