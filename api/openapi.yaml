@@ -9,7 +9,9 @@ servers:
   - url: 'http://localhost:3003/'
 tags:
   - name: Weather
-    description: Weather, and so on
+    description: |
+      Weather, and so on,
+      and so forth
 paths:
   /weather:
     get:
@@ -40,4 +42,3 @@ components:
       properties:
         message:
           type: string
-

@@ -5,68 +5,68 @@
 <!-- TOC -->
 
 - [Swagger Editor 3.0 Docker Container](#swagger-editor-30-docker-container)
-- [Introduction](#introduction)
-- [Assumptions](#assumptions)
-- [_Instant Gratification_ Docker Container](#instant-gratification-docker-container)
-  - [Host Artefacts](#host-artefacts)
-    - [Create Host directories](#create-host-directories)
-    - [Create the example openapi.yaml API Specification (OpenAPI 3.0.1)](#create-the-example-openapiyaml-api-specification-openapi-301)
-  - [Create Docker Image](#create-docker-image)
-    - [Create Dockerfile in the Host directory](#create-dockerfile-in-the-host-directory)
-    - [Create baseline Docker Image](#create-baseline-docker-image)
-  - [Start the Docker Container Instance](#start-the-docker-container-instance)
-    - [Create a container based on the new Image](#create-a-container-based-on-the-new-image)
-    - [Connect to the running container](#connect-to-the-running-container)
-    - [Test Swagger Editor](#test-swagger-editor)
-    - [Important Notes](#important-notes)
-  - [Must I edit openapi.yaml file in the container?](#must-i-edit-openapiyaml-file-in-the-container)
-  - [How to edit the yaml file in the Container](#how-to-edit-the-yaml-file-in-the-container)
-    - [Use docker cp command](#use-docker-cp-command)
-    - [Use VSCode Remote](#use-vscode-remote)
-    - [Use bound volume](#use-bound-volume)
-- [Other Notes](#other-notes)
-  - [Initial API Specification Example YAML](#initial-api-specification-example-yaml)
-  - [JSON Versions of Specification](#json-versions-of-specification)
-  - [Where to change where Swagger Editor looks for the YAML specification and under what name?](#where-to-change-where-swagger-editor-looks-for-the-yaml-specification-and-under-what-name)
-  - [What port does Swagger Editor listen on?](#what-port-does-swagger-editor-listen-on)
-- [Next Steps](#next-steps)
-- [Licensing](#licensing)
+  - [Introduction](#introduction)
+  - [Assumptions](#assumptions)
+  - [_Instant Gratification_ Docker Container](#instant-gratification-docker-container)
+    - [Host Artefacts](#host-artefacts)
+      - [Create Host directories](#create-host-directories)
+      - [Create the example openapi.yaml API Specification (OpenAPI 3.0.1)](#create-the-example-openapiyaml-api-specification-openapi-301)
+    - [Create Docker Image](#create-docker-image)
+      - [Create Dockerfile in the Host directory](#create-dockerfile-in-the-host-directory)
+      - [Create baseline Docker Image](#create-baseline-docker-image)
+    - [Start the Docker Container Instance](#start-the-docker-container-instance)
+      - [Create a container based on the new Image](#create-a-container-based-on-the-new-image)
+      - [Connect to the running container](#connect-to-the-running-container)
+      - [Test Swagger Editor](#test-swagger-editor)
+      - [Important Notes](#important-notes)
+    - [Must I edit openapi.yaml file in the container?](#must-i-edit-openapiyaml-file-in-the-container)
+    - [How to edit the yaml file in the Container](#how-to-edit-the-yaml-file-in-the-container)
+      - [Use docker cp command](#use-docker-cp-command)
+      - [Use VSCode Remote](#use-vscode-remote)
+      - [Use bound volume](#use-bound-volume)
+  - [Other Notes](#other-notes)
+    - [Initial API Specification Example YAML](#initial-api-specification-example-yaml)
+    - [JSON Version of Specification](#json-version-of-specification)
+    - [Where to change where Swagger Editor looks for the YAML specification and under what name?](#where-to-change-where-swagger-editor-looks-for-the-yaml-specification-and-under-what-name)
+    - [What port does Swagger Editor listen on?](#what-port-does-swagger-editor-listen-on)
+  - [Next Steps](#next-steps)
+  - [Licensing](#licensing)
 
 <!-- /TOC -->
 
 <!--
 # TODO
 
--   write the 'how to use the image' writeup to go with the image
--   Upload the image to the docker hub
--   write a 'how to use the container' to go with the container
--   git and push to github
--   write a blog entry and post
--   write a tweet and post
+- write the 'how to use the image' writeup to go with the image
+- Upload the image to the docker hub
+- write a 'how to use the container' to go with the container
+- git and push to github
+- write a blog entry and post
+- write a tweet and post
  -->
 
-# Introduction
+## Introduction
 
 The intent of this document is to provide a set of steps that a reader can use to create a self-contained Docker container for API-First development using latest Swagger Editor (3.x) and OpenAPI (2 or 3).  
 A Dockerfile is provided to short-circuit the process.
 
 The container will have the means to:
 
--   Run the Swagger Editor Server
--   Convert YAML specification documents to JSON and the vice versa
+- Run the Swagger Editor Server
+- Convert YAML specification documents to JSON and the vice versa
 
 The container is based on the latest Docker node image with extras.
 
 The container uses:
 
--   Swagger Editor Distributable (`swagger-editor-dist`)
--   `swagger-codegen-cli/3.0.20` to support YAML to JSON conversion and generation of client and server stubs based on the OpenAPI Specification / Swagger file for supported languages. `swagger-codegen-cli` requires Java 8, which is installed during container setup.
--   `nodemon` server
--   `http-server` server
+- Swagger Editor Distributable (`swagger-editor-dist`)
+- `swagger-codegen-cli/3.0.20` to support YAML to JSON conversion and generation of client and server stubs based on the OpenAPI Specification / Swagger file for supported languages. `swagger-codegen-cli` requires Java 8, which is installed during container setup.
+- `nodemon` server
+- `http-server` server
 
 [[Top]](#Swagger-Editor-Docker-Container-for-API-First-Development)
 
-# Assumptions
+## Assumptions
 
 It is assumed in the text that Windows 10 with Debian WSL is the Host operating environment.
 
@@ -74,7 +74,7 @@ Make such changes, to the small number of commands that this affects, as you nee
 
 [[Top]](#Swagger-Editor-Docker-Container-for-API-First-Development)
 
-# _Instant Gratification_ Docker Container
+## _Instant Gratification_ Docker Container
 
 In this section we will create a docker container with all that can be pre-installed and pre-configured to run the Swagger Editor server and convert between YAML and JSON openapi specifications.
 
@@ -86,9 +86,9 @@ If this does not match your environment then you will need to make such adjustme
 
 [[Top]](#Swagger-Editor-Docker-Container-for-API-First-Development)
 
-## Host Artefacts
+### Host Artefacts
 
-### Create Host directories
+#### Create Host directories
 
 Adjust Host paths above directory named `api` as you see fit.
 
@@ -102,7 +102,7 @@ cd ${HOST_DIR}/swagger_editor
 
 [[Top]](#Swagger-Editor-Docker-Container-for-API-First-Development)
 
-### Create the example openapi.yaml API Specification (OpenAPI 3.0.1)
+#### Create the example openapi.yaml API Specification (OpenAPI 3.0.1)
 
 We need example openapi specifications in yaml and json in the Docker image.
 
@@ -161,13 +161,13 @@ EOF
 
 [[Top]](#Swagger-Editor-Docker-Container-for-API-First-Development)
 
-## Create Docker Image
+### Create Docker Image
 
 The Dockerfile and following instructions will create a baseline Docker Image. The Image will be able to be used for spinning up Container instances as needed with minimum extra work required to make them useable for API development work on different APIs.
 
 [[Top]](#Swagger-Editor-Docker-Container-for-API-First-Development)
 
-### Create Dockerfile in the Host directory
+#### Create Dockerfile in the Host directory
 
 Change timezone and exposed ports as required.
 
@@ -250,7 +250,7 @@ EOF
 
 [[Top]](#Swagger-Editor-Docker-Container-for-API-First-Development)
 
-### Create baseline Docker Image
+#### Create baseline Docker Image
 
 The following command will create the baseline image with specific packages pre-installed and the timezone set.
 
@@ -270,9 +270,9 @@ From this point, until the image is deleted, we can spin up a container, based o
 
 [[Top]](#Swagger-Editor-Docker-Container-for-API-First-Development)
 
-## Start the Docker Container Instance
+### Start the Docker Container Instance
 
-### Create a container based on the new Image
+#### Create a container based on the new Image
 
 Now that we have the baseline image we can create and explore a container that uses it.
 
@@ -296,7 +296,7 @@ docker run \
 
 [[Top]](#Swagger-Editor-Docker-Container-for-API-First-Development)
 
-### Connect to the running container
+#### Connect to the running container
 
 The following command will connect us to teh running container and offer us the interactive shell to work in:
 
@@ -306,7 +306,7 @@ docker exec -it -w='/api' swagger_editor bash -l
 
 [[Top]](#Swagger-Editor-Docker-Container-for-API-First-Development)
 
-### Test Swagger Editor
+#### Test Swagger Editor
 
 The swagger-editor server is started when the container is created and started, and re-starts when the container is restarted.
 
@@ -316,7 +316,7 @@ http://localhost:3001/#
 
 Please note that the Swagger Editor is running in the Host's Web Browser and that it can import OpenAPI specifications from the Host and export / save OpenAPI specifications ot the host, this it can be used as a local Swagger Editor on the Host.
 
-### Important Notes
+#### Important Notes
 
 The Swagger Editor server's `index.html` has been rigged to serve the file `openapi.yaml` from its own directory.
 
@@ -337,17 +337,17 @@ As given in the example, as soon as the `openapi.yaml` changes in the `api` dire
 
 [[Top]](#Swagger-Editor-Docker-Container-for-API-First-Development)
 
-## Must I edit openapi.yaml file in the container?
+### Must I edit openapi.yaml file in the container?
 
 **No.**
 
 As mentioned at the last paragraph in section [Test Swagger Editor](#Test-Swagger-Editor), this container can be used as a local Swagger Editor for editing OpenAPI files in Host directories.
 
-## How to edit the yaml file in the Container
+### How to edit the yaml file in the Container
 
 There are at least 3 different ways in which the container's `/api/openapi.yaml` file can be edited such that changes persist across container re-creation.
 
-### Use docker cp command
+#### Use docker cp command
 
 Docker has the ability to copy files from the Host to the Container and vice versa.
 
@@ -374,7 +374,7 @@ Assuming the container as discussed so far, with `openapi.yaml` in the container
 
 Using this method one can edit the original `openapi.yaml` file in the local Swagger Editor, save it to the Host, and copy it to the container for the next Swagger Editor session.
 
-### Use VSCode Remote
+#### Use VSCode Remote
 
 If you use VSCode for development, and VSCode has the Remote Containers extension installed, you can connect to the container and use VSCode to edit files directly in the container.
 
@@ -395,7 +395,7 @@ The remote VSCode might need OpenAPI / Swagger extensions for pretty-printing, s
 
 You can copy the `openapi.yaml` file between the Host and the Guest, in either direction, using docker cp command. See [Use docker cp command](#Use-docker-cp-command).
 
-### Use bound volume
+#### Use bound volume
 
 It is possible to share a Host directory with the container in such a way that changes made in one environment are visible in the other.
 
@@ -438,15 +438,15 @@ Because the host and the container share the (bound) volume where the API specif
 
 [[Top]](#Swagger-Editor-Docker-Container-for-API-First-Development)
 
-# Other Notes
+## Other Notes
 
-## Initial API Specification Example YAML
+### Initial API Specification Example YAML
 
 Our original OpenAPI Specification was copied to the container file `/api/openapi.yaml` during Docker Image build.
 
 [[Top]](#Swagger-Editor-Docker-Container-for-API-First-Development)
 
-## JSON Versions of Specification
+### JSON Version of Specification
 
 Our subsequent manipulations, during Docker Image build, resulted in the creation of the following equivalents:
 
@@ -457,14 +457,14 @@ Our subsequent manipulations, during Docker Image build, resulted in the creatio
 
 [[Top]](#Swagger-Editor-Docker-Container-for-API-First-Development)
 
-## Where to change where Swagger Editor looks for the YAML specification and under what name?
+### Where to change where Swagger Editor looks for the YAML specification and under what name?
 
 `/swagger_tools/swagger-editor/index.html`.
 Please note that this change will persist once the docker container in which it is made is removed and re-created, unless this change is made in the Dockerfile and the image is re-built. Subsequently created containers that use the modified image will "inherit" the change.
 
 [[Top]](#Swagger-Editor-Docker-Container-for-API-First-Development)
 
-## What port does Swagger Editor listen on?
+### What port does Swagger Editor listen on?
 
 Swagger Editor server inside the container listens on port 3001.
 To change the port on which the Host listens, change the port mapping the container start command uses.
@@ -482,7 +482,7 @@ If you change the listening port make sure to adjust your `docker run ...` and `
 
 [[Top]](#Swagger-Editor-Docker-Container-for-API-First-Development)
 
-# Next Steps
+## Next Steps
 
 Now that one can edit the API using a Swagger Editor hosted in the local environment in a docker container it might be good to be able to generate API stubs to test the API.
 
@@ -490,7 +490,7 @@ This is coming in the next installment.
 
 [[Top]](#Swagger-Editor-Docker-Container-for-API-First-Development)
 
-# Licensing
+## Licensing
 
 The MIT License (MIT)
 
