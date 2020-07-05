@@ -365,7 +365,7 @@ With the container running, in a host web browser open the pre-configured API sp
 
 http://localhost:3001/#
 
-Please note that the Swagger Editor is running in the Host's Web Browser and that it can import OpenAPI specifications from the Host and export / save OpenAPI specifications ot the host, this it can be used as a local Swagger Editor on the Host.
+Please note that the Swagger Editor is running in the Host's Web Browser and that it can import OpenAPI specifications from the Host and export / save OpenAPI specifications to the host, thus it can be used as a local Swagger Editor on the Host.
 
 ## Important Notes
 

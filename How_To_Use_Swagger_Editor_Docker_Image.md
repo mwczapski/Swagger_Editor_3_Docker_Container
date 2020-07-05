@@ -1,11 +1,12 @@
 # Swagger Editor 3.0 Docker Container
 
+> Modification Date: 2020-07-05
+
 <!-- <font size="6">Swagger Editor Docker Container</font> -->
 
 <!-- TOC -->
 
 - [Swagger Editor 3.0 Docker Container](#swagger-editor-30-docker-container)
-- [TODO](#todo)
   - [Introduction](#introduction)
   - [Assumptions](#assumptions)
   - [Create the Docker Container](#create-the-docker-container)
@@ -18,15 +19,11 @@
     - [Start the container](#start-the-container)
     - [Connect to the running container](#connect-to-the-running-container)
     - [Test Swagger Editor on Host](#test-swagger-editor-on-host)
+    - [Use swagger-codegen to convert yaml to json and back](#use-swagger-codegen-to-convert-yaml-to-json-and-back)
   - [Next Steps](#next-steps)
   - [Licensing](#licensing)
 
 <!-- /TOC -->
-
-# TODO
-- add 'how ot convert yaml to json and back' section
-- write a blog entry and post
-- write a tweet and post
 
 ## Introduction
 
@@ -235,6 +232,56 @@ http://localhost:3001/#
 
 Please note that the Swagger Editor is running in the Host's Web Browser and that it can import OpenAPI specifications from the Host and export / save OpenAPI specifications to the host, thus it can also be used as a local Swagger Editor on the Host.
 
+### Use swagger-codegen to convert yaml to json and back
+
+Swagger Editor Docker Image includes an example of how to use the Swagger Codegen to convert YAML tyo JSON and vice versa.
+
+The example script is to be found in the container in `/swagger_tools/swagger-codegen_convert_example.sh`.
+
+Assuming that the source openapi.yaml is in container's directory `/api/openapi.yaml`, the command to execute in the container to convert it to JSON in a subdirectory `converted` of that directory` will be:
+
+``` shell
+java -jar /swagger_tools/swagger-codegen/swagger-codegen-cli.jar generate -i /api/openapi.yaml -l openapi -o /api/converted
+
+```
+
+As mentioned, this command needs to be executed inside the container. To do the same thing directly from the Host one can use `docker exec` like:
+
+``` shell
+docker exec -it -w=/api swagger_editor java -jar /swagger_tools/swagger-codegen/swagger-codegen-cli.jar generate -i /api/openapi.yaml -l openapi -o /api/converted
+
+```
+
+To person the reverse operation, converting `/api/converted/openapi.json` to `/api/converted/openapi.yaml` one could execute, inside the container:
+
+``` shell
+
+java -jar /swagger_tools/swagger-codegen/swagger-codegen-cli.jar generate -i /api/converted/openapi.json -l openapi-yaml -o /api/converted
+
+```
+
+To do the same thing directly from the Host one can use `docker exec` like:
+
+``` shell
+docker exec -it -w=/api swagger_editor java -jar /swagger_tools/swagger-codegen/swagger-codegen-cli.jar generate -i /api/converted/openapi.json -l openapi-yaml -o /api/converted
+
+```
+
+To verify that these files exist, one can execute the following `docker exec` command frm the host:
+
+``` shell
+docker exec -it swagger_editor ls -al /api/converted
+
+```
+
+To copy the converted file form the container to the Host one could use a docker exec command from the Host similar to the following:
+
+``` shell
+docker cp swagger_editor:/api/converted/openapi.json ./
+
+```
+
+[[Top]](#swagger-editor-30-docker-container)
 
 
 ## Next Steps

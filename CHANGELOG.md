@@ -23,3 +23,7 @@ To have the Swagger Editor server started on container start or re-start delete 
 
 The original Dockerfile included commands to convert the openapi.yaml to JSON and the resulting openapi.json to YAML again.  
 Commands to accomplish this are externalised to a script `/swagger_tools/swagger-codegen_convert_example.sh`. While this script is still executed at Image build, it is now persisted in the Image and can be viewed as an example in the container.
+
+### Added section __Use swagger-codegen to convert yaml to json and back__
+
+Added section "Use swagger-codegen to convert yaml to json and back" with examples of container commands and commands that can be used from the host.
