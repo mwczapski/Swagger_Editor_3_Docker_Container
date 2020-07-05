@@ -1,4 +1,4 @@
-# Swagger Editor 3.0 Docker Container
+# How to Use the Swagger Editor 3.0 Docker Container
 
 > Modification Date: 2020-07-05
 
@@ -6,26 +6,26 @@
 
 <!-- TOC -->
 
-- [Swagger Editor 3.0 Docker Container](#swagger-editor-30-docker-container)
-  - [Introduction](#introduction)
-  - [Assumptions](#assumptions)
-  - [Create the Docker Container](#create-the-docker-container)
-    - [Create Host directory which to mount in the container](#create-host-directory-which-to-mount-in-the-container)
-    - [Notes on the Container - __Read Before Opening__](#notes-on-the-container---read-before-opening)
-      - [Synchronisation of changes between Host and Container](#synchronisation-of-changes-between-host-and-container)
-      - [What port does Swagger Editor listen on?](#what-port-does-swagger-editor-listen-on)
-      - [Create the example openapi.yaml API Specification (OpenAPI 3.0.1)](#create-the-example-openapiyaml-api-specification-openapi-301)
-  - [Use the container](#use-the-container)
-    - [Start the container](#start-the-container)
-    - [Connect to the running container](#connect-to-the-running-container)
-    - [Test Swagger Editor on Host](#test-swagger-editor-on-host)
-    - [Use swagger-codegen to convert yaml to json and back](#use-swagger-codegen-to-convert-yaml-to-json-and-back)
-  - [Next Steps](#next-steps)
-  - [Licensing](#licensing)
+- [How to Use the Swagger Editor 3.0 Docker Container](#how-to-use-the-swagger-editor-30-docker-container)
+  - [1.1. Introduction](#11-introduction)
+  - [1.2. Assumptions](#12-assumptions)
+  - [1.3. Create the Docker Container](#13-create-the-docker-container)
+    - [1.3.1. Create Host directory which to mount in the container](#131-create-host-directory-which-to-mount-in-the-container)
+    - [1.3.2. Notes on the Container - __Read Before Opening__](#132-notes-on-the-container---read-before-opening)
+      - [1.3.2.1. Synchronisation of changes between Host and Container](#1321-synchronisation-of-changes-between-host-and-container)
+      - [1.3.2.2. What port does Swagger Editor listen on?](#1322-what-port-does-swagger-editor-listen-on)
+      - [1.3.2.3. Create the example openapi.yaml API Specification (OpenAPI 3.0.1)](#1323-create-the-example-openapiyaml-api-specification-openapi-301)
+  - [1.4. Use the container](#14-use-the-container)
+    - [1.4.1. Start the container](#141-start-the-container)
+    - [1.4.2. Connect to the running container](#142-connect-to-the-running-container)
+    - [1.4.3. Test Swagger Editor on Host](#143-test-swagger-editor-on-host)
+    - [1.4.4. Use swagger-codegen to convert yaml to json and back](#144-use-swagger-codegen-to-convert-yaml-to-json-and-back)
+  - [1.5. Next Steps](#15-next-steps)
+  - [1.6. Licensing](#16-licensing)
 
 <!-- /TOC -->
 
-## Introduction
+## 1.1. Introduction
 
 The intent of this document is to provide information on how to create a self-contained Docker container for API-First development using the [mwczapski/swagger-editor:1.0.0](https://hub.docker.com/r/mwczapski/swagger_editor) image hosted on Docker Hub.
 
@@ -34,23 +34,23 @@ The container provides the means to:
 - Run the Swagger Editor Server
 - Convert YAML specification documents to JSON and the vice versa
 
-[[Top]](#swagger-editor-30-docker-container)
+[[Top]](#how-to-use-the-swagger-editor-30-docker-container)
 
-## Assumptions
+## 1.2. Assumptions
 
 It is assumed in the text that Windows 10 with Debian WSL is the Host operating environment.
 
 Make such changes, to the small number of commands that this affects, as you need to make it work in a regular Linux environment.
 
-[[Top]](#swagger-editor-30-docker-container)
+[[Top]](#how-to-use-the-swagger-editor-30-docker-container)
 
-## Create the Docker Container
+## 1.3. Create the Docker Container
 
 In this section a docker container with all that that is necessary to serve the Swagger Editor UI to the Host's Web Browser and convert between YAML and JSON openapi specifications will be created and started.
 
-[[Top]](#swagger-editor-30-docker-container)
+[[Top]](#how-to-use-the-swagger-editor-30-docker-container)
 
-### Create Host directory which to mount in the container
+### 1.3.1. Create Host directory which to mount in the container
 
 Adjust Host paths above directory named `api` as you see fit.
 
@@ -61,11 +61,11 @@ mkdir -pv ${HOST_DIR}/swagger_editor/api
 cd ${HOST_DIR}/swagger_editor
 
 ```
-[[Top]](#swagger-editor-30-docker-container)
+[[Top]](#how-to-use-the-swagger-editor-30-docker-container)
 
-### Notes on the Container - __Read Before Opening__
+### 1.3.2. Notes on the Container - __Read Before Opening__
 
-#### Synchronisation of changes between Host and Container
+#### 1.3.2.1. Synchronisation of changes between Host and Container
 
 On startup, the container starts the Swagger Editor server. This happens when the container is first started and when it is re-started. 
 
@@ -85,9 +85,9 @@ The purpose of copying all files form the `/api` directory, and not just the `op
 Please note that the Swagger Editor runs in the Web Browser in the Host environment.  
 The recommended container startup command, shown iin this document, mounts a host directory over the top of the container's `/api` directory. This gives the Swagger Editor the ability to write to the `/api` directory in the container and have the changes visible in the mapped host's directory. This gives external tools, like for example VSCode or IntelliJ running on the Host, the ability to edit the files in the Host's directory and have them "immediately" available to the Swagger Editor server in the container, and consequently to the Swagger Editor UI in the Web Browser as soon as the Web Browser page is refreshed.
 
-[[Top]](#swagger-editor-30-docker-container)
+[[Top]](#how-to-use-the-swagger-editor-30-docker-container)
 
-#### What port does Swagger Editor listen on?
+#### 1.3.2.2. What port does Swagger Editor listen on?
 
 Swagger Editor server inside the container listens on port `3001`.
 To change the port on which the Host listens, change the port mapping the container start command uses.
@@ -101,10 +101,10 @@ CONTAINER_MAPPED_PORTS=" -p 127.0.0.1:3210:3001/tcp "
 
 will change the port the Hosts maps to the container's `3001` from `3001` to `3210`. The Host's web browser will need to use the url `http://localost:3210/#` to connect to the Swagger Editor served from container.
 
-[[Top]](#swagger-editor-30-docker-container)
+[[Top]](#how-to-use-the-swagger-editor-30-docker-container)
 
 
-#### Create the example openapi.yaml API Specification (OpenAPI 3.0.1)
+#### 1.3.2.3. Create the example openapi.yaml API Specification (OpenAPI 3.0.1)
 
 As already mentioned, the container expect the `openapi.yaml` file to be available in it's `/api` directory. As recommended, the container startup command will bind a Host directory to a `/api` directory in the container.
 
@@ -161,12 +161,12 @@ EOF
 
 ```
 
-[[Top]](#swagger-editor-30-docker-container)
+[[Top]](#how-to-use-the-swagger-editor-30-docker-container)
 
 
-## Use the container
+## 1.4. Use the container
 
-### Start the container
+### 1.4.1. Start the container
 
 On the host, start the container with the following command, assuming `/mnt/d/github_materials/swagger_editor/api` is the host directory to share.
 
@@ -209,9 +209,9 @@ chmod u+x start_swagger_editor_container.sh
 Start the container: `./start_swagger_editor_container.sh`
 
 
-[[Top]](#swagger-editor-30-docker-container)
+[[Top]](#how-to-use-the-swagger-editor-30-docker-container)
 
-### Connect to the running container
+### 1.4.2. Connect to the running container
 
 The following command will connect us to the running container and offer the interactive bash shell to work in if required, such as for example when running the swagger-codegen to convert between yaml and json. I can think of no other reason it might be necessary work inside the container.
 
@@ -220,9 +220,9 @@ docker exec -it -w='/api' swagger_editor bash -l
 
 ```
 
-[[Top]](#swagger-editor-30-docker-container)
+[[Top]](#how-to-use-the-swagger-editor-30-docker-container)
 
-### Test Swagger Editor on Host
+### 1.4.3. Test Swagger Editor on Host
 
 The swagger-editor server is started when the container is created and started, and re-starts when the container is restarted.
 
@@ -232,7 +232,7 @@ http://localhost:3001/#
 
 Please note that the Swagger Editor is running in the Host's Web Browser and that it can import OpenAPI specifications from the Host and export / save OpenAPI specifications to the host, thus it can also be used as a local Swagger Editor on the Host.
 
-### Use swagger-codegen to convert yaml to json and back
+### 1.4.4. Use swagger-codegen to convert yaml to json and back
 
 Swagger Editor Docker Image includes an example of how to use the Swagger Codegen to convert YAML tyo JSON and vice versa.
 
@@ -281,18 +281,18 @@ docker cp swagger_editor:/api/converted/openapi.json ./
 
 ```
 
-[[Top]](#swagger-editor-30-docker-container)
+[[Top]](#how-to-use-the-swagger-editor-30-docker-container)
 
 
-## Next Steps
+## 1.5. Next Steps
 
 Now that one can edit the API using a Swagger Editor hosted in the docker container it might be good to be able to generate API stubs to test the API.
 
 This is coming in the next installment.
 
-[[Top]](#swagger-editor-30-docker-container)
+[[Top]](#how-to-use-the-swagger-editor-30-docker-container)
 
-## Licensing
+## 1.6. Licensing
 
 The MIT License (MIT)
 
@@ -300,6 +300,6 @@ Copyright © 2020 Michael Czapski
 
 Rights to Docker (and related), Git (and related), Debian, its packages and libraries, and 3rd party packages and libraries, belong to their respective owners.
 
-[[Top]](#swagger-editor-30-docker-container)
+[[Top]](#how-to-use-the-swagger-editor-30-docker-container)
 
 2020/07 MCz
