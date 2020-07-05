@@ -21,9 +21,15 @@ RUN apt-get update && \
   \
   # create the api directory (to be masked by bound volume if required)
   #
-  mkdir -pv /api
+  mkdir -pv /api && \
+  mkdir -pv /swagger_tools
 
+# bring in external files
+#
 COPY api/openapi.yaml /api
+COPY scripts/run_editor_server.sh /swagger_tools
+COPY scripts/swagger-codegen_convert_example.sh /swagger_tools
+
 
 RUN \
 \
@@ -37,11 +43,14 @@ RUN \
   mkdir -pv /swagger_tools/swagger-codegen && \
   wget https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/3.0.20/swagger-codegen-cli-3.0.20.jar -O /swagger_tools/swagger-codegen/swagger-codegen-cli.jar && \
 \
-  # convert yaml to jason and back again
+  # make scripts runnable
   #
-  cd /swagger_tools/swagger-editor/ && \
-  java -jar /swagger_tools/swagger-codegen/swagger-codegen-cli.jar generate -i /swagger_tools/swagger-editor/openapi.yaml -l openapi -o /swagger_tools/swagger-editor && \
-  java -jar /swagger_tools/swagger-codegen/swagger-codegen-cli.jar generate -i /swagger_tools/swagger-editor/openapi.json -l openapi-yaml -o /swagger_tools/swagger-editor/converted && \
+  chmod u+x /swagger_tools/run_editor_server.sh && \
+  chmod u+x /swagger_tools/swagger-codegen_convert_example.sh && \
+\
+  # convert yaml to jason and back again, as an example
+  #
+  /swagger_tools/swagger-codegen_convert_example.sh && \
 \
   # Install swagger-editor
   #
@@ -56,14 +65,9 @@ RUN \
   sed -i "s|const editor = SwaggerEditorBundle({|const editor = SwaggerEditorBundle({ url: 'http://localhost:3001/openapi.yaml',|" index.html && \
   echo "Done" && \
 \
-  # create "run editor" server script
+  # instrument docker-entrypoint.sh to execute the /swagger_tools/run_editor_server.sh on start/re-start
   #
-  echo '#!/bin/bash' > /swagger_tools/run_editor_server.sh && \
-  echo 'cd /swagger_tools/swagger-editor' >> /swagger_tools/run_editor_server.sh && \
-  echo 'nodemon -L -w index.html -w /api/openapi.yaml -w /api/*.pdf -x "cp -v /api/* /swagger_tools/swagger-editor/ && http-server -p 3001"' >> ${0}.log >> /swagger_tools/run_editor_server.sh && \
-  chmod u+x /swagger_tools/run_editor_server.sh && \
-\
-  sed -i '/set -e/a test $( ps -C run_editor_serv -o stat --no-headers ) == "S" || nohup /swagger_tools/run_editor_server.sh </dev/null &' /usr/local/bin/docker-entrypoint.sh
+  sed -i '/set -e/a test $( ps -C run_editor_serv -o stat --no-headers ) == "S" || nohup /swagger_tools/run_editor_server.sh 0</dev/null 1>/dev/null 2>/dev/null &' /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 3001
 

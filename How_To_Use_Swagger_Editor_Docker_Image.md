@@ -5,6 +5,7 @@
 <!-- TOC -->
 
 - [Swagger Editor 3.0 Docker Container](#swagger-editor-30-docker-container)
+- [TODO](#todo)
   - [Introduction](#introduction)
   - [Assumptions](#assumptions)
   - [Create the Docker Container](#create-the-docker-container)
@@ -22,19 +23,10 @@
 
 <!-- /TOC -->
 
-<!--
 # TODO
-
-docker tag swagger_editor:1.0.0 mwczapski/swagger_editor:1.0.0
-docker push mwczapski/swagger_editor:1.0.0
-
-- write the 'how to use the image' writeup to go with the image
-
-- write a 'how to use the container' to go with the container
-- git and push to github
+- add 'how ot convert yaml to json and back' section
 - write a blog entry and post
 - write a tweet and post
- -->
 
 ## Introduction
 
