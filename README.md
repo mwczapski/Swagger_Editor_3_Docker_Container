@@ -6,5 +6,6 @@ The following resources are available in this repository:
 
 1. [Steps to create the ready-to-go Swagger Editor 3.0 Docker Image and a ready-to-go Swagger Editor 3.0 Docker Container](Swagger_Editor_Docker_Container_for_API-First_Development.md)
 2. [Start Docker Container and work with the Swagger Editor served from the container](How_To_Use_Swagger_Editor_Docker_Image.md)
+3. [Set up Swagger Editor on Windows 10 with no Docker or Windows Subsystem for Linux dependencies](swagger_editor_local.md)
 
 The Docker Image created in (1) and used in (2) is available at [mwczapski/swagger-editor:1.0.0](https://hub.docker.com/r/mwczapski/swagger_editor) on Docker Hub.

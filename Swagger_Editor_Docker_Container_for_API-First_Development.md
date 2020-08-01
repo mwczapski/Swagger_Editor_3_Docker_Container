@@ -6,36 +6,36 @@
 
 <!-- TOC -->
 
-- [Swagger Editor 3.0 Docker Container](#swagger-editor-30-docker-container)
-  - [Introduction](#introduction)
-  - [Assumptions](#assumptions)
-  - [Docker Image for _Instant Gratification_ Docker Container](#docker-image-for-instant-gratification-docker-container)
-    - [Host Artefacts](#host-artefacts)
-      - [Create Host directories](#create-host-directories)
-      - [Create the example openapi.yaml API Specification (OpenAPI 3.0.1)](#create-the-example-openapiyaml-api-specification-openapi-301)
-      - [Create run_editor_server.sh Script](#create-run_editor_serversh-script)
-      - [Create swagger-codegen yaml to json and back convert example](#create-swagger-codegen-yaml-to-json-and-back-convert-example)
-    - [Create Docker Image](#create-docker-image)
-      - [Create Dockerfile in the Host directory](#create-dockerfile-in-the-host-directory)
-      - [Create baseline Docker Image](#create-baseline-docker-image)
-    - [Start Docker Container Instance](#start-docker-container-instance)
-      - [Create a container based on the new Image](#create-a-container-based-on-the-new-image)
-      - [Connect to the running container](#connect-to-the-running-container)
-      - [Test Swagger Editor](#test-swagger-editor)
-  - [Important Notes](#important-notes)
-    - [Disable / Enable automatic Swagger Editor server startup on container start/restart](#disable--enable-automatic-swagger-editor-server-startup-on-container-startrestart)
-    - [Initial API Specification Example YAML](#initial-api-specification-example-yaml)
-    - [JSON Version of Specification](#json-version-of-specification)
-    - [Watching for changes and restarting Swagger Editor server](#watching-for-changes-and-restarting-swagger-editor-server)
-    - [Must I edit openapi.yaml file in the container?](#must-i-edit-openapiyaml-file-in-the-container)
-    - [How to edit the yaml file in the Container](#how-to-edit-the-yaml-file-in-the-container)
-      - [Use docker cp command](#use-docker-cp-command)
-      - [Use VSCode Remote](#use-vscode-remote)
-      - [Use bound volume](#use-bound-volume)
-    - [Where to change where Swagger Editor looks for the YAML specification and under what name?](#where-to-change-where-swagger-editor-looks-for-the-yaml-specification-and-under-what-name)
-    - [What port does Swagger Editor listen on?](#what-port-does-swagger-editor-listen-on)
-  - [Next Steps](#next-steps)
-  - [Licensing](#licensing)
+-   [Swagger Editor 3.0 Docker Container](#swagger-editor-30-docker-container)
+    -   [Introduction](#introduction)
+    -   [Assumptions](#assumptions)
+    -   [Docker Image for _Instant Gratification_ Docker Container](#docker-image-for-instant-gratification-docker-container)
+        -   [Host Artefacts](#host-artefacts)
+            -   [Create Host directories](#create-host-directories)
+            -   [Create the example openapi.yaml API Specification (OpenAPI 3.0.1)](#create-the-example-openapiyaml-api-specification-openapi-301)
+            -   [Create run_editor_server.sh Script](#create-run_editor_serversh-script)
+            -   [Create swagger-codegen yaml to json and back convert example](#create-swagger-codegen-yaml-to-json-and-back-convert-example)
+        -   [Create Docker Image](#create-docker-image)
+            -   [Create Dockerfile in the Host directory](#create-dockerfile-in-the-host-directory)
+            -   [Create baseline Docker Image](#create-baseline-docker-image)
+        -   [Start Docker Container Instance](#start-docker-container-instance)
+            -   [Create a container based on the new Image](#create-a-container-based-on-the-new-image)
+            -   [Connect to the running container](#connect-to-the-running-container)
+            -   [Test Swagger Editor](#test-swagger-editor)
+    -   [Important Notes](#important-notes)
+        -   [Disable / Enable automatic Swagger Editor server startup on container start/restart](#disable--enable-automatic-swagger-editor-server-startup-on-container-startrestart)
+        -   [Initial API Specification Example YAML](#initial-api-specification-example-yaml)
+        -   [JSON Version of Specification](#json-version-of-specification)
+        -   [Watching for changes and restarting Swagger Editor server](#watching-for-changes-and-restarting-swagger-editor-server)
+        -   [Must I edit openapi.yaml file in the container?](#must-i-edit-openapiyaml-file-in-the-container)
+        -   [How to edit the yaml file in the Container](#how-to-edit-the-yaml-file-in-the-container)
+            -   [Use docker cp command](#use-docker-cp-command)
+            -   [Use VSCode Remote](#use-vscode-remote)
+            -   [Use bound volume](#use-bound-volume)
+        -   [Where to change where Swagger Editor looks for the YAML specification and under what name?](#where-to-change-where-swagger-editor-looks-for-the-yaml-specification-and-under-what-name)
+        -   [What port does Swagger Editor listen on?](#what-port-does-swagger-editor-listen-on)
+    -   [Next Steps](#next-steps)
+    -   [Licensing](#licensing)
 
 <!-- /TOC -->
 
@@ -46,17 +46,17 @@ A Dockerfile is provided to short-circuit the process.
 
 The container will have the means to:
 
-- Run the Swagger Editor Server
-- Convert YAML specification documents to JSON and the vice versa
+-   Run the Swagger Editor Server
+-   Convert YAML specification documents to JSON and the vice versa
 
 The container is based on the latest Docker node image with extras.
 
 The container uses:
 
-- Swagger Editor Distributable (`swagger-editor-dist`)
-- `swagger-codegen-cli/3.0.20` to support YAML to JSON conversion and generation of client and server stubs based on the OpenAPI Specification / Swagger file for supported languages. `swagger-codegen-cli` requires Java 8, which is installed during container setup.
-- `nodemon` server
-- `http-server` server
+-   Swagger Editor Distributable (`swagger-editor-dist`)
+-   `swagger-codegen-cli/3.0.20` to support YAML to JSON conversion and generation of client and server stubs based on the OpenAPI Specification / Swagger file for supported languages. `swagger-codegen-cli` requires Java 8, which is installed during container setup.
+-   `nodemon` server
+-   `http-server` server
 
 [[Top]](#swagger-editor-30-docker-container)
 
@@ -159,8 +159,7 @@ EOF
 
 Create a server start script, to be executed from the docker-entrypoint.sh in the container on container start and restart.
 
-
-``` shell
+```shell
 HOST_DIR=/mnt/d/github_materials
 
 cat <<-'EOF' > ${HOST_DIR}/swagger_editor/scripts/run_editor_server.sh
@@ -181,9 +180,9 @@ chmod u+x ${HOST_DIR}/swagger_editor/scripts/run_editor_server.sh
 
 #### Create swagger-codegen yaml to json and back convert example
 
-Create an example of converting YAML to JSON and back using swagger-codegen. Not needed for working with the Swagger Editor server in the container. 
+Create an example of converting YAML to JSON and back using swagger-codegen. Not needed for working with the Swagger Editor server in the container.
 
-``` shell
+```shell
 HOST_DIR=/mnt/d/github_materials
 
 cat <<-'EOF' > ${HOST_DIR}/swagger_editor/scripts/swagger-codegen_convert_example.sh
@@ -194,7 +193,7 @@ cd /swagger_tools/swagger-editor
 # convert yaml to jason and back again example
 # not needed for work with the Swagger Editor server
 #
-cd /swagger_tools/swagger-editor/ 
+cd /swagger_tools/swagger-editor/
 
 java -jar /swagger_tools/swagger-codegen/swagger-codegen-cli.jar generate -i /swagger_tools/swagger-editor/openapi.yaml -l openapi -o /swagger_tools/swagger-editor
 
@@ -377,7 +376,7 @@ To prevent autostart on container start and restart, create a file `/api/.no_aut
 
 There are several ways to do this. The easiest is to execute the following commands from the Host:
 
-``` shell
+```shell
 docker exec -it swagger_editor ps -ef ## check whether server processes are running
 
 docker exec -it swagger_editor touch /api/.no_autostart ## create file
@@ -392,7 +391,7 @@ docker exec -it swagger_editor ps -ef ## check whether server processes are runn
 
 To re-enable autostart on container start and restart, delete the file `/api/.no_autostart` in the container and restart the container.
 
-``` shell
+```shell
 docker exec -it swagger_editor ps -ef ## check whether server processes are running
 
 docker exec -it swagger_editor ls -al /api/.no_autostart ## verify that file exists
@@ -404,7 +403,6 @@ docker restart swagger_editor ## restart container
 docker exec -it swagger_editor ps -ef ## check whether server processes are running
 
 ```
-
 
 [[Top]](#swagger-editor-30-docker-container)
 
@@ -427,7 +425,7 @@ Our subsequent manipulations, during Docker Image build, resulted in the creatio
 
 ### Watching for changes and restarting Swagger Editor server
 
-The Swagger Editor server's `index.html` has been rigged to serve the file `openapi.yaml` from its  directory.
+The Swagger Editor server's `index.html` has been rigged to serve the file `openapi.yaml` from its directory.
 
 The command in the `/swagger_tools/run_editor_server.sh` script is reproduced below.
 
@@ -536,6 +534,7 @@ docker run \
     --interactive \
     --tty\
         ${IMAGE_NAME}:${IMAGE_VERSION}
+github
 
 ```
 
@@ -586,7 +585,7 @@ This is coming in the next installment.
 
 The MIT License (MIT)
 
-Copyright © 2020 Michael Czapski
+Copyright ï¿½ 2020 Michael Czapski
 
 Rights to Docker (and related), Git (and related), Debian, its packages and libraries, and 3rd party packages and libraries, belong to their respective owners.
 

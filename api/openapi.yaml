@@ -6,7 +6,7 @@ info:
     and swagger ui deployment and configuration
   version: 1.0.0
 servers:
-  - url: 'http://localhost:3003/'
+  - url: "http://localhost:3003/"
 tags:
   - name: Weather
     description: Weather, and so on
@@ -16,23 +16,18 @@ paths:
       tags:
         - Weather
       description: |
-        It is __Good__ to be a _King_
-        And a *Queen*
-        And a _Prince_
-        And a __Princess__
-        And all the Grandchildren
-        And their Children
+        It is __Good__ to be a _King_ Harry of the Golden River 345678
       operationId: getWeather
       responses:
-        '200':
-          description: 'All is _well_, but not quite'
+        "200":
+          description: "All is _well_, but not quite"
           content: {}
-        '500':
+        "500":
           description: Unexpected Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/response_500'
+                $ref: "#/components/schemas/response_500"
 components:
   schemas:
     response_500:
@@ -40,4 +35,3 @@ components:
       properties:
         message:
           type: string
-
